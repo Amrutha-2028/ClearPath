@@ -111,7 +111,6 @@
         <div class="controls">
             <button onclick="toggleContrast()">🌓 High Contrast</button>
             <button onclick="changeSize(2)">➕ Larger Text</button>
-            <button onclick="changeSize(-2)">➖ Smaller Text</button>
         </div>
     </section>
 
@@ -161,11 +160,6 @@
             <button id="stop-describer-btn" onclick="stopDescriberCamera()" style="display:none;">⏹️ Stop Camera</button>
         </div>
         <div id="image-description">Waiting for camera...</div>
-        <div class="controls" id="desc-audio-controls" style="display:none;">
-            <button onclick="playDescription()">🔊 Play Description</button>
-            <button onclick="pauseDescription()">⏸️ Pause</button>
-            <button onclick="stopDescription()">⏹️ Stop</button>
-        </div>
     </section>
 </div>
 
@@ -197,10 +191,7 @@ document.getElementById('volume-slider').addEventListener('input', function() {
 
 function toggleContrast() { document.body.classList.toggle('high-contrast-mode'); }
 let fontSize = 18;
-function changeSize(delta) {
-    fontSize = Math.max(10, Math.min(40, fontSize + delta));
-    document.body.style.fontSize = fontSize + 'px';
-}
+function changeSize(delta) { fontSize += delta; document.body.style.fontSize = fontSize + 'px'; }
 
 // ==================== SPEECH TO TEXT ====================
 const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -588,55 +579,12 @@ function captureAndDescribe() {
         '<strong>📷 Scene Analysis:</strong><br>' + description + '<br><br>' +
         '<small style="opacity:0.7">Free local analysis — no internet or API needed.</small>';
 
-    // Show play/pause controls
-    document.getElementById('desc-audio-controls').style.display = 'flex';
-
-    // Store description for replay
-    window.lastDescription = description;
-
-    // Read aloud with female voice
-    speakDescription(description);
-}
-
-function getFemaleVoice() {
-    const voices = synth.getVoices();
-    // Try to find a female English voice
-    const femaleKeywords = ['female', 'woman', 'girl', 'zira', 'susan', 'karen', 'samantha', 'victoria', 'moira', 'fiona', 'tessa'];
-    let voice = voices.find(v =>
-        femaleKeywords.some(k => v.name.toLowerCase().includes(k)) && v.lang.startsWith('en')
-    );
-    // Fallback: any English voice that isn't explicitly male
-    if (!voice) {
-        const maleKeywords = ['male', 'man', 'david', 'mark', 'daniel', 'alex', 'fred', 'ralph'];
-        voice = voices.find(v =>
-            v.lang.startsWith('en') && !maleKeywords.some(k => v.name.toLowerCase().includes(k))
-        );
-    }
-    return voice || null;
-}
-
-function speakDescription(text) {
+    // Read aloud
     synth.cancel();
-    const utter = new SpeechSynthesisUtterance(text);
+    const utter = new SpeechSynthesisUtterance(description);
     utter.rate = parseFloat(document.getElementById('rate-slider').value) || 0.9;
     utter.volume = parseFloat(document.getElementById('volume-slider').value) / 100 || 1;
-    const femaleVoice = getFemaleVoice();
-    if (femaleVoice) utter.voice = femaleVoice;
     synth.speak(utter);
-}
-
-function playDescription() {
-    if (synth.paused) { synth.resume(); return; }
-    if (window.lastDescription) speakDescription(window.lastDescription);
-}
-
-function pauseDescription() {
-    if (synth.speaking && !synth.paused) synth.pause();
-    else if (synth.paused) synth.resume();
-}
-
-function stopDescription() {
-    synth.cancel();
 }
 
 function stopDescriberCamera() {
