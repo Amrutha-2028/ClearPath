@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TSA AccessAbility Hub</title>
+    <style>
+        /* CSS: Accessibility & Visual Design */
+        :root {
+            --bg-color: #f4f4f9;
+            --text-color: #333;
+            --accent-color: #0056b3;
+            --btn-text: #fff;
+        }
+
+        .high-contrast-mode {
+            --bg-color: #000000;
+            --text-color: #f1ff00; /* High-viz Yellow */
+            --accent-color: #ffffff;
+            --btn-text: #000;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: all 0.25s ease;
+            padding: 2rem;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: rgba(128, 128, 128, 0.1);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--accent-color);
+        }
+
+        h1 { border-bottom: 2px solid var(--accent-color); padding-bottom: 10px; }
+
+        textarea {
+            width: 100%;
+            height: 150px;
+            margin: 1rem 0;
+            font-size: 1.2rem;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .controls { display: flex; gap: 10px; flex-wrap: wrap; }
+
+        button {
+            padding: 15px 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            background-color: var(--accent-color);
+            color: var(--btn-text);
+            border: none;
+            border-radius: 5px;
+        }
+
+        button:hover { filter: brightness(1.2); outline: 3px solid orange; }
+    </style>
+</head>
+<body>
+
+<div class="container" role="main">
+    <h1>TSA AccessAbility Hub</h1>
+    <p>Assistive tool for vision and hearing support.</p>
+
+    <section>
+        <label for="text-input"><strong>Accessibility Tool:</strong> Type, paste, or speak text.</label>
+        <textarea id="text-input" placeholder="Your text will appear here..."></textarea>
+        
+        <div id="status" style="font-style: italic; margin-bottom: 10px; color: var(--accent-color);">
+            Status: Ready
+        </div>
+
+        <div class="controls">
+            <button onclick="startListening()" style="background-color: #28a745;">🎤 Start Listening</button>
+            
+            <button onclick="speak()">🔊 Read Aloud</button>
+            <button onclick="stopSpeak()">⏹️ Stop</button>
+            <button onclick="toggleContrast()">🌓 High Contrast</button>
+            <button onclick="changeSize(2)">➕ Larger Text</button>
+        </div>
+    </section>
+</div>
+
+<script>
+    // JavaScript: Accessibility Logic
+    const synth = window.speechSynthesis;
+
+    function speak() {
+        if (synth.speaking) synth.cancel();
+        const text = document.getElementById('text-input').value;
+        const utterThis = new SpeechSynthesisUtterance(text);
+        utterThis.pitch = 1;
+        utterThis.rate = 0.9; // Slightly slower for clarity
+        synth.speak(utterThis);
+    }
+
+    function stopSpeak() {
+        synth.cancel();
+    }
+
+    function toggleContrast() {
+        document.body.classList.toggle('high-contrast-mode');
+    }
+
+    let fontSize = 18;
+    function changeSize(delta) {
+        fontSize += delta;
+        document.body.style.fontSize = fontSize + "px";
+    }
+    // Speech-to-Text Logic
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    
+    if (!SpeechRecognition) {
+        alert("Wait! Your browser doesn't support speech recognition. Try using Chrome.");
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.continuous = false; // Stops after you stop talking
+    recognition.interimResults = false; // Only shows final result
+    recognition.lang = 'en-US';
+
+    function startListening() {
+        const status = document.getElementById('status');
+        status.innerHTML = "Status: 🔴 Listening... speak now!";
+        recognition.start();
+    }
+
+    recognition.onresult = function(event) {
+        const transcript = event.results[0][0].transcript;
+        document.getElementById('text-input').value += transcript;
+        document.getElementById('status').innerHTML = "Status: Text captured!";
+    };
+
+    recognition.onspeechend = function() {
+        recognition.stop();
+    };
+
+    recognition.onerror = function(event) {
+        document.getElementById('status').innerHTML = "Status: Error occurred: " + event.error;
+    };
+</script>
+
+</body>
+</html>
