@@ -7,6 +7,7 @@
     <title>Hearing Assistant</title>
     <link rel="preconnect" href="https://fonts.cdnfonts.com" />
     <link href="https://fonts.cdnfonts.com/css/open-dyslexic" rel="stylesheet" />
+    <link rel="icon" type="image/x-icon" href="clearPathLogo.ico.jpg">
     <style>
         :root {
             --bg-color: #f4f4f9;
@@ -213,7 +214,7 @@
             Use speech recognition, contrast and font controls, and quick buzz alerts.
         </p>
         <section>
-            <h2>Speech-to-Text</h2>
+            <h2>🎙️Speech-to-Text</h2>
             <div class="controls">
                 <button type="button" id="start-listen" onclick="startListening()">🎤 Start Listening</button>
                 <button type="button" id="stop-listen" onclick="stopListening()" disabled>⏹️ Stop Listening</button>
@@ -225,7 +226,7 @@
         </section>
 
         <section>
-            <h2>Accessibility Controls</h2>
+            <h2>⚙️Accessibility Controls</h2>
             <div class="slider-row">
                 <label for="font-size-range">Font size</label>
                 <input type="range" id="font-size-range" min="14" max="40" value="18" oninput="updateFontSize(this.value)">
@@ -246,7 +247,7 @@
         </section>
 
         <section>
-            <h2>Quick Action Buzz</h2>
+            <h2>⚡Quick Action Buzz</h2>
             <p class="small-note">Tap to play a short buzzer: once for yes, twice for help.</p>
             <div class="quick-actions">
                 <button type="button" onclick="buzzPattern(1)" style="background:#007bff;">Buzz once: Yes</button>
