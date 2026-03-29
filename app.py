@@ -7,6 +7,10 @@ app = Flask(__name__)
 def index():
     return render_template('vision.html')
 
+@app.route('/hearing')
+def hearing():
+    return render_template('hearing.html')
+
 if __name__ == '__main__':
     os.makedirs('templates', exist_ok=True)
 

@@ -78,14 +78,32 @@
             color: var(--accent-color);
             margin-bottom: 0.5rem;
         }
+        .nav-button {
+            text-decoration: none;
+            background-color: #0056b3;
+            color: #fff;
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            display: inline-block;
+            transition: transform 0.1s ease;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-1px);
+            filter: brightness(1.1);
+        }
     </style>
 </head>
 <body>
 <div class="container" role="main">
+    <div class="top-nav">
+       <a href="hearing.html" class="nav-button">Hearing Page & More</a>
+     </div>
+
     <h1>TSA AccessAbility Hub</h1>
     <p>Assistive tool for vision and hearing support with AI-powered features.</p>
     <div id="model-status">⏳ Loading object detection model...</div>
-
+    
     <!-- TEXT TO SPEECH -->
     <section>
         <h2>📢 Text to Speech</h2>
