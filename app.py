@@ -1,20 +1,28 @@
 from flask import Flask, render_template
 import os
+import shutil
 
 app = Flask(__name__)
 
 @app.route('/')
 def index():
+    return render_template('index.html')
+
+@app.route('/vision.html')
+def vision():
     return render_template('vision.html')
 
-@app.route('/hearing')
+@app.route('/hearing.html')
 def hearing():
     return render_template('hearing.html')
 
 if __name__ == '__main__':
     os.makedirs('templates', exist_ok=True)
 
-    import shutil
+    if os.path.exists('index.html'):
+        shutil.copy('index.html', 'templates/index.html')
+        print("✓ Copied index.html → templates/index.html")
+
     if os.path.exists('vision.html'):
         shutil.copy('vision.html', 'templates/vision.html')
         print("✓ Copied vision.html → templates/vision.html")
