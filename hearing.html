@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hearing Assistant</title>
+    <link rel="preconnect" href="https://fonts.cdnfonts.com" />
+    <link href="https://fonts.cdnfonts.com/css/open-dyslexic" rel="stylesheet" />
+    <style>
+        :root {
+            --bg-color: #f4f4f9;
+            --text-color: #222;
+            --accent-color: #0056b3;
+            --button-text: #fff;
+            --panel-bg: rgba(255,255,255,0.9);
+        }
+        .high-contrast-mode {
+            --bg-color: #000;
+            --text-color: #ffeb3b;
+            --accent-color: #ffffff;
+            --button-text: #000;
+            --panel-bg: rgba(0,0,0,0.85);
+        }
+        .color-blind-mode {
+            --bg-color: #f7f2e7;
+            --text-color: #003049;
+            --accent-color: #d62828;
+            --button-text: #ffffff;
+            filter: saturate(1.1);
+        }
+        .dyslexic-font,
+        .dyslexic-font * {
+            font-family: 'OpenDyslexic', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+            font-weight: 600 !important;
+            letter-spacing: 0.04em !important;
+            word-spacing: 0.12em !important;
+            text-rendering: optimizeLegibility !important;
+        }
+        .dyslexic-font {
+            line-height: 1.8 !important;
+        }
+        * {
+            box-sizing: border-box;
+        }
+        html, body {
+            margin: 0;
+            min-height: 100%;
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            padding: 1.5rem;
+            transition: background-color 0.2s ease, color 0.2s ease, filter 0.2s ease;
+        }
+        .container {
+            max-width: 980px;
+            margin: 0 auto;
+            background: var(--panel-bg);
+            border: 2px solid var(--accent-color);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 12px 35px rgba(0,0,0,0.12);
+        }
+        .nav-button {
+        text-decoration: none;
+        background-color: #0056b3;
+        color: #fff;
+        padding: 0.75rem 1rem;
+        border-radius: 10px;
+        display: inline-block;
+        transition: transform 0.1s ease;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-1px);
+            filter: brightness(1.1);
+        }
+        h1 {
+            margin-top: 0;
+            font-size: 2.2rem;
+            letter-spacing: 0.02em;
+        }
+        .intro {
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+        }
+        .intro strong {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        .controls,
+        .settings,
+        .quick-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin: 1rem 0;
+        }
+        button,
+        select {
+            border: none;
+            border-radius: 10px;
+            padding: 0.9rem 1rem;
+            font-size: 1rem;
+            cursor: pointer;
+            background-color: var(--accent-color);
+            color: var(--button-text);
+            transition: transform 0.15s ease, filter 0.15s ease;
+        }
+        button:hover,
+        select:hover {
+            transform: translateY(-1px);
+            filter: brightness(1.05);
+        }
+        input[type="color"] {
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            width: 3rem;
+            height: 3rem;
+            padding: 0;
+            background: transparent;
+            cursor: pointer;
+            transition: transform 0.15s ease, filter 0.15s ease;
+        }
+        input[type="color"]::-webkit-color-swatch-wrapper {
+            padding: 0;
+        }
+        input[type="color"]::-webkit-color-swatch {
+            border: none;
+            border-radius: 10px;
+        }
+        input[type="color"]:hover {
+            transform: translateY(-1px);
+            filter: brightness(1.05);
+        }
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .controls button:nth-child(1) {
+            min-width: 180px;
+        }
+        textarea {
+            width: 100%;
+            min-height: 180px;
+            margin-top: 0.75rem;
+            padding: 1rem;
+            font-size: 1.1rem;
+            border-radius: 14px;
+            border: 2px solid #ccc;
+            resize: vertical;
+            font-family: inherit;
+            color: var(--text-color);
+            background: #fff;
+        }
+        .slider-row,
+        .picker-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+            margin: 1rem 0;
+        }
+        .slider-row label,
+        .picker-row label {
+            min-width: 150px;
+            font-weight: 700;
+        }
+        .slider-row input[type="range"] {
+            flex: 1;
+            margin: 0;
+        }
+        .status-box,
+        .voice-box {
+            background: rgba(255,255,255,0.95);
+            border: 1px solid #ddd;
+            border-radius: 14px;
+            padding: 1rem;
+            font-size: 0.95rem;
+        }
+        .status-box strong {
+            display: block;
+            margin-bottom: 0.35rem;
+        }
+        .small-note {
+            color: #555;
+            font-size: 0.95rem;
+        }
+        @media (max-width: 720px) {
+            .controls,
+            .settings,
+            .quick-actions,
+            .slider-row,
+            .picker-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="top-nav">
+            <a href="vision.html" class="nav-button">Vision Page & More</a>
+        </div>
+        <h1>TSA AccessAbility Hub</h1>
+        <p class="intro">
+            <strong>Voice assistant for hearing and communication support.</strong>
+            Use speech recognition, contrast and font controls, and quick buzz alerts.
+        </p>
+        <section>
+            <h2>Speech-to-Text</h2>
+            <div class="controls">
+                <button type="button" id="start-listen" onclick="startListening()">🎤 Start Listening</button>
+                <button type="button" id="stop-listen" onclick="stopListening()" disabled>⏹️ Stop Listening</button>
+                <button type="button" id="clear-text" onclick="clearTranscript()" style="background:#6c757d;">🧹 Clear</button>
+                <button type="button" id="copy-text" onclick="copyTranscript()" style="background:#17a2b8;">📋 Copy</button>
+            </div>
+            <textarea id="transcript" placeholder="Recognized speech appears here..."></textarea>
+        </section>
+
+        <section>
+            <h2>Accessibility Controls</h2>
+            <div class="slider-row">
+                <label for="font-size-range">Font size</label>
+                <input type="range" id="font-size-range" min="14" max="40" value="18" oninput="updateFontSize(this.value)">
+                <span id="font-size-label">18px</span>
+            </div>
+            <div class="picker-row">
+                <label for="font-color-picker">Font color</label>
+                <input type="color" id="font-color-picker" value="#222222" onchange="setFontColor(this.value)">
+                <label for="bg-color-picker">Background color</label>
+                <input type="color" id="bg-color-picker" value="#f4f4f9" onchange="setBackgroundColor(this.value)">
+            </div>
+            <div class="settings">
+                <button type="button" onclick="toggleContrast()">🌓 High Contrast</button>
+                <button type="button" onclick="toggleColorBlindMode()" style="background:#28a745;">🌈 Color Blind Filter</button>
+                <button type="button" onclick="toggleDyslexicFont()" style="background:#6f42c1;">🔤 Open Dyslexic Font</button>
+                <button type="button" onclick="resetAccessibility()" style="background:#343a40;">♻️ Reset</button>
+            </div>
+        </section>
+
+        <section>
+            <h2>Quick Action Buzz</h2>
+            <p class="small-note">Tap to play a short buzzer: once for yes, twice for help.</p>
+            <div class="quick-actions">
+                <button type="button" onclick="buzzPattern(1)" style="background:#007bff;">Buzz once: Yes</button>
+                <button type="button" onclick="buzzPattern(2)" style="background:#fd7e14;">Buzz twice:       I need help</button>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
+        let recognition = null;
+        let listening = false;
+
+        const transcriptEl = document.getElementById('transcript');
+        const statusEl = document.getElementById('hearing-status');
+        const startBtn = document.getElementById('start-listen');
+        const stopBtn = document.getElementById('stop-listen');
+
+        function updateStatus(message) {
+            statusEl.textContent = message;
+        }
+
+        function updateButtonState() {
+            startBtn.disabled = listening;
+            stopBtn.disabled = !listening;
+        }
+
+        function createRecognition() {
+            if (!SpeechRecognitionAPI) {
+                updateStatus('Speech recognition unavailable in this browser. Use Chrome or Edge.');
+                startBtn.disabled = true;
+                stopBtn.disabled = true;
+                return;
+            }
+            recognition = new SpeechRecognitionAPI();
+            recognition.continuous = true;
+            recognition.interimResults = false;
+            recognition.lang = 'en-US';
+
+            recognition.onstart = () => {
+                listening = true;
+                updateStatus('Listening...');
+                updateButtonState();
+            };
+            recognition.onresult = event => {
+                let transcript = '';
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                    const result = event.results[i];
+                    transcript += result[0].transcript;
+                    if (result.isFinal) transcript += ' ';
+                }
+                transcriptEl.value += transcript;
+                updateStatus('Text captured.');
+            };
+            recognition.onerror = event => {
+                updateStatus('Recognition error: ' + event.error);
+                listening = false;
+                updateButtonState();
+            };
+            recognition.onend = () => {
+                listening = false;
+                updateStatus('Stopped listening.');
+                updateButtonState();
+            };
+        }
+
+        function startListening() {
+            if (!recognition) {
+                createRecognition();
+            }
+            if (!recognition || listening) return;
+            try {
+                recognition.start();
+            } catch (error) {
+                updateStatus('Could not start listening: ' + error.message);
+            }
+        }
+
+        function stopListening() {
+            if (!recognition || !listening) return;
+            recognition.stop();
+        }
+
+        function clearTranscript() {
+            transcriptEl.value = '';
+            updateStatus('Transcript cleared.');
+        }
+
+        function copyTranscript() {
+            transcriptEl.select();
+            document.execCommand('copy');
+            updateStatus('Copied transcript to clipboard.');
+        }
+
+        function updateFontSize(value) {
+            document.body.style.fontSize = value + 'px';
+            document.getElementById('font-size-label').textContent = value + 'px';
+        }
+
+        function setFontColor(color) {
+            document.body.style.color = color;
+        }
+
+        function setBackgroundColor(color) {
+            document.body.style.backgroundColor = color;
+        }
+
+        function toggleContrast() {
+            document.body.classList.toggle('high-contrast-mode');
+        }
+
+        function toggleColorBlindMode() {
+            document.body.classList.toggle('color-blind-mode');
+        }
+
+        function toggleDyslexicFont() {
+            document.body.classList.toggle('dyslexic-font');
+        }
+
+        function resetAccessibility() {
+            document.body.classList.remove('high-contrast-mode', 'color-blind-mode', 'dyslexic-font');
+            document.body.style.fontSize = '18px';
+            document.getElementById('font-size-range').value = 18;
+            document.getElementById('font-size-label').textContent = '18px';
+            document.getElementById('font-color-picker').value = '#222222';
+            document.getElementById('bg-color-picker').value = '#f4f4f9';
+            document.body.style.color = '#222222';
+            document.body.style.backgroundColor = '#f4f4f9';
+        }
+
+        let audioCtx = null;
+        function getAudioContext() {
+            if (!audioCtx || audioCtx.state === 'closed') {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+
+        function buzzPattern(times) {
+            const ctx = getAudioContext();
+            const now = ctx.currentTime;
+            for (let i = 0; i < times; i++) {
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.value = 700;
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                gain.gain.setValueAtTime(0.2, now + i * 0.3);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.3 + 0.15);
+                osc.start(now + i * 0.3);
+                osc.stop(now + i * 0.3 + 0.15);
+            }
+            updateStatus(times === 1 ? 'Buzzed once.' : 'Buzzed twice.' );
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            createRecognition();
+            updateButtonState();
+        });
+    </script>
+</body>
+</html>
