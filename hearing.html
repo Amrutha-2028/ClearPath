@@ -23,6 +23,23 @@
             --button-text: #f3dccf;
             --panel-bg: rgba(0,0,0,0.85);
         }
+        .high-contrast-mode button,
+        .high-contrast-mode .nav-button,
+        .high-contrast-mode .settings button,
+        .high-contrast-mode .controls button,
+        .high-contrast-mode .quick-actions button {
+            background-color: var(--accent-color) !important;
+            color: var(--button-text) !important;
+            border: 2px solid #f3dccf !important;
+            box-shadow: none !important;
+        }
+        .high-contrast-mode button:hover,
+        .high-contrast-mode .nav-button:hover,
+        .high-contrast-mode .settings button:hover,
+        .high-contrast-mode .controls button:hover,
+        .high-contrast-mode .quick-actions button:hover {
+            filter: brightness(1.05) !important;
+        }
         .color-blind-mode {
             --bg-color: #f7f2e7;
             --text-color: #003049;
@@ -43,7 +60,7 @@
         }
         .color-blind-mode .settings button[onclick*="toggleColorBlindMode"] {
             background-color: #ffb300 !important;
-            color: #000 !important;
+            color: #faf8f8 !important;
         }
         .dyslexic-font,
         .dyslexic-font * {
@@ -236,7 +253,7 @@
                 <button type="button" id="clear-text" onclick="clearTranscript()" style="background:#6c757d;">🧹 Clear</button>
                 <button type="button" id="copy-text" onclick="copyTranscript()" style="background:#17a2b8;">📋 Copy</button>
             </div>
-            <div id="hearing-status" class="status-box" style="color: black;">Status: ready.</div>
+            <div id="hearing-status" class="status-box">Status: ready.</div>
             <textarea id="transcript" placeholder="Recognized speech appears here..."></textarea>
         </section>
 
@@ -391,8 +408,8 @@
             document.getElementById('font-size-label').textContent = '18px';
             document.getElementById('font-color-picker').value = '#222222';
             document.getElementById('bg-color-picker').value = '#f4f4f9';
-            document.body.style.color = '#222222';
-            document.body.style.backgroundColor = '#f4f4f9';
+            document.body.style.removeProperty('color');
+            document.body.style.removeProperty('background-color');
         }
 
         let audioCtx = null;
