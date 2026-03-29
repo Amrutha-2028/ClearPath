@@ -18,17 +18,32 @@
         }
         .high-contrast-mode {
             --bg-color: #000;
-            --text-color: #ffeb3b;
-            --accent-color: #ffffff;
-            --button-text: #000;
+            --text-color: #f6ff00;
+            --accent-color: #e92a2a;
+            --button-text: #f3dccf;
             --panel-bg: rgba(0,0,0,0.85);
         }
         .color-blind-mode {
             --bg-color: #f7f2e7;
             --text-color: #003049;
-            --accent-color: #d62828;
+            --accent-color: #0057b8;
             --button-text: #ffffff;
             filter: saturate(1.1);
+        }
+        .color-blind-mode button,
+        .color-blind-mode .nav-button {
+            background-color: #0057b8 !important;
+            color: #ffffff !important;
+            border: 2px solid #000 !important;
+            box-shadow: 0 0 0 1px #000 inset;
+        }
+        .color-blind-mode button:hover,
+        .color-blind-mode .nav-button:hover {
+            filter: brightness(1.05) !important;
+        }
+        .color-blind-mode .settings button[onclick*="toggleColorBlindMode"] {
+            background-color: #ffb300 !important;
+            color: #000 !important;
         }
         .dyslexic-font,
         .dyslexic-font * {
@@ -221,7 +236,7 @@
                 <button type="button" id="clear-text" onclick="clearTranscript()" style="background:#6c757d;">🧹 Clear</button>
                 <button type="button" id="copy-text" onclick="copyTranscript()" style="background:#17a2b8;">📋 Copy</button>
             </div>
-            <div id="hearing-status" class="status-box">Status: ready.</div>
+            <div id="hearing-status" class="status-box" style="color: black;">Status: ready.</div>
             <textarea id="transcript" placeholder="Recognized speech appears here..."></textarea>
         </section>
 
@@ -248,7 +263,7 @@
 
         <section>
             <h2>⚡Quick Action Buzz</h2>
-            <p class="small-note">Tap to play a short buzzer: once for yes, twice for help.</p>
+            <p class="small-note" style="color: #2096da;">Tap to play a short buzzer: once for yes, twice for help.</p>
             <div class="quick-actions">
                 <button type="button" onclick="buzzPattern(1)" style="background:#007bff;">Buzz once: Yes</button>
                 <button type="button" onclick="buzzPattern(2)" style="background:#fd7e14;">Buzz twice:       I need help</button>
