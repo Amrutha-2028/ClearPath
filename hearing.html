@@ -218,6 +218,7 @@
                 <button type="button" id="clear-text" onclick="clearTranscript()" style="background:#6c757d;">🧹 Clear</button>
                 <button type="button" id="copy-text" onclick="copyTranscript()" style="background:#17a2b8;">📋 Copy</button>
             </div>
+            <div id="hearing-status" class="status-box">Status: ready.</div>
             <textarea id="transcript" placeholder="Recognized speech appears here..."></textarea>
         </section>
 
@@ -263,7 +264,9 @@
         const stopBtn = document.getElementById('stop-listen');
 
         function updateStatus(message) {
-            statusEl.textContent = message;
+            if (statusEl) {
+                statusEl.textContent = message;
+            }
         }
 
         function updateButtonState() {
