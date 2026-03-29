@@ -97,7 +97,7 @@
 <body>
 <div class="container" role="main">
     <div class="top-nav">
-        <a href="hearing.html" class="nav-button">Hearing Page & More</a>
+        <a href="/hearing.html" class="nav-button">Hearing Page & More</a>
      </div>
 
     <h1>TSA AccessAbility Hub</h1>
@@ -129,6 +129,7 @@
         <div class="controls">
             <button onclick="toggleContrast()">🌓 High Contrast</button>
             <button onclick="changeSize(2)">➕ Larger Text</button>
+            <button onclick="changeSize(-2)">➖ Smaller Text</button>
         </div>
     </section>
 
@@ -175,6 +176,7 @@
         <div class="controls">
             <button id="start-describer-btn" onclick="startDescriberCamera()">📷 Start Camera</button>
             <button id="capture-describe-btn" onclick="captureAndDescribe()" style="display:none;">📸 Capture & Describe</button>
+            <button id="pause-describe-btn" onclick="pauseSpeak()" style="display:none;">⏸️ Pause Description</button>
             <button id="stop-describer-btn" onclick="stopDescriberCamera()" style="display:none;">⏹️ Stop Camera</button>
         </div>
         <div id="image-description">Waiting for camera...</div>
@@ -324,6 +326,7 @@ function stopAllCameras() {
     document.getElementById('image-description').textContent = 'Waiting for camera...';
     document.getElementById('start-describer-btn').style.display = 'inline-block';
     document.getElementById('capture-describe-btn').style.display = 'none';
+    document.getElementById('pause-describe-btn').style.display = 'none';
     document.getElementById('stop-describer-btn').style.display = 'none';
 }
 
@@ -478,6 +481,7 @@ async function startDescriberCamera() {
         await vid.play();
         document.getElementById('start-describer-btn').style.display = 'none';
         document.getElementById('capture-describe-btn').style.display = 'inline-block';
+        document.getElementById('pause-describe-btn').style.display = 'inline-block';
         document.getElementById('stop-describer-btn').style.display = 'inline-block';
         document.getElementById('image-description').textContent = 'Camera ready! Click Capture & Describe.';
     } catch(err) { alert('Camera error: ' + err.message); }
@@ -610,6 +614,7 @@ function stopDescriberCamera() {
     document.getElementById('describer-video').style.display = 'none';
     document.getElementById('start-describer-btn').style.display = 'inline-block';
     document.getElementById('capture-describe-btn').style.display = 'none';
+    document.getElementById('pause-describe-btn').style.display = 'none';
     document.getElementById('stop-describer-btn').style.display = 'none';
     document.getElementById('image-description').textContent = 'Waiting for camera...';
 }
