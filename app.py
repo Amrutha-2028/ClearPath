@@ -19,6 +19,10 @@ if __name__ == '__main__':
         shutil.copy('vision.html', 'templates/vision.html')
         print("✓ Copied vision.html → templates/vision.html")
 
+    if os.path.exists('hearing.html'):
+        shutil.copy('hearing.html', 'templates/hearing.html')
+        print("✓ Copied hearing.html → templates/hearing.html")
+
     port = int(os.environ.get('PORT', 5000))
     print(f"✓ Starting server on http://localhost:{port}")
     try:
