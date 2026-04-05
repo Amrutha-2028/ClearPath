@@ -204,6 +204,15 @@ function getLightLevel(brightness) {
     return 'Dark';
 }
 
+function speakColorInfo(objectName, colorName, lightName) {
+    synth.cancel();
+    const text = 'Object: ' + objectName + '. Color: ' + colorName + '. Light level: ' + lightName;
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.rate = parseFloat(document.getElementById('rate-slider').value) || 0.9;
+    utter.volume = parseFloat(document.getElementById('volume-slider').value) / 100 || 1;
+    synth.speak(utter);
+}
+
 async function startColorDetection() {
     try {
         stopAllCameras();
@@ -250,13 +259,18 @@ async function startColorDetection() {
                         bright += (pixels[i] + pixels[i + 1] + pixels[i + 2]) / 3;
                     }
                     r = Math.round(r / n); g = Math.round(g / n); bv = Math.round(bv / n); bright = Math.round(bright / n);
+                    const objectName = biggest.class + ' (' + Math.round(biggest.score * 100) + '%)';
+                    const colorName = getColor(r, g, bv);
+                    const lightName = getLightLevel(bright);
                     document.getElementById('color-info').innerHTML =
-                        '<p><strong>Object:</strong> ' + biggest.class + ' (' + Math.round(biggest.score * 100) + '%)</p>' +
-                        '<p><strong>Color:</strong> ' + getColor(r, g, bv) + ' (RGB: ' + r + ', ' + g + ', ' + bv + ')</p>' +
-                        '<p><strong>Light Level:</strong> ' + getLightLevel(bright) + ' (' + bright + '/255)</p>';
+                        '<p><strong>Object:</strong> ' + objectName + '</p>' +
+                        '<p><strong>Color:</strong> ' + colorName + ' (RGB: ' + r + ', ' + g + ', ' + bv + ')</p>' +
+                        '<p><strong>Light Level:</strong> ' + lightName + ' (' + bright + '/255)</p>';
+                    speakColorInfo(objectName, colorName, lightName);
                 } else {
                     document.getElementById('color-info').innerHTML =
                         '<p><strong>Object:</strong> None detected</p><p><strong>Color:</strong> N/A</p><p><strong>Light Level:</strong> Analyzing...</p>';
+                    speakColorInfo('None detected', 'N/A', 'Analyzing');
                 }
             } else {
                 // Fallback: full frame color analysis
@@ -268,10 +282,14 @@ async function startColorDetection() {
                     bright += (pixels[i] + pixels[i + 1] + pixels[i + 2]) / 3;
                 }
                 r = Math.round(r / n); g = Math.round(g / n); bv = Math.round(bv / n); bright = Math.round(bright / n);
+                const objectName = 'No model loaded';
+                const colorName = getColor(r, g, bv);
+                const lightName = getLightLevel(bright);
                 document.getElementById('color-info').innerHTML =
-                    '<p><strong>Object:</strong> No model loaded</p>' +
-                    '<p><strong>Color:</strong> ' + getColor(r, g, bv) + ' (RGB: ' + r + ', ' + g + ', ' + bv + ')</p>' +
-                    '<p><strong>Light Level:</strong> ' + getLightLevel(bright) + ' (' + bright + '/255)</p>';
+                    '<p><strong>Object:</strong> ' + objectName + '</p>' +
+                    '<p><strong>Color:</strong> ' + colorName + ' (RGB: ' + r + ', ' + g + ', ' + bv + ')</p>' +
+                    '<p><strong>Light Level:</strong> ' + lightName + ' (' + bright + '/255)</p>';
+                speakColorInfo(objectName, colorName, lightName);
             }
         }, 500);
     } catch (err) { alert('Camera error: ' + err.message); }

@@ -243,8 +243,8 @@ button {
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
-    background: linear-gradient(135deg, var(--accent-color), var(--accent-hover));
-    color: var(--button-text);
+    background: white;
+    color: black;
     border: none;
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
