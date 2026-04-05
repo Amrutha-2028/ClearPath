@@ -311,6 +311,7 @@ button:disabled {
     background: rgba(255, 255, 255, 0.2);
     outline: none;
     -webkit-appearance: none;
+    appearance: none;
     transition: all 0.3s ease;
 }
 
