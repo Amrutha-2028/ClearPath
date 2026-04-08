@@ -481,7 +481,6 @@
             left: 100%;
         }
 
-        /* Additional modern touches */
         p {
             line-height: 1.7;
             margin-bottom: 1rem;
@@ -494,7 +493,6 @@
             font-weight: 700;
         }
 
-        /* Responsive design improvements */
         @media (max-width: 768px) {
             body {
                 padding: 0.5rem;
@@ -512,7 +510,6 @@
             }
         }
 
-        /* Custom styles for color pickers */
         .picker-row {
             display: flex;
             flex-wrap: wrap;
@@ -574,7 +571,7 @@
         <div class="top-nav">
             <a href="/vision.html" class="nav-button">Vision Page & More</a>
         </div>
-        <h1>✨ Clear Path ✨</h1>
+        <h1>Clear Path ✨</h1>
         <p class="intro">
             <strong>Voice assistant for hearing and communication support.</strong>
             Use speech recognition, contrast and font controls, and quick buzz alerts.
@@ -587,7 +584,7 @@
                 <button type="button" id="clear-text" onclick="clearTranscript()">🧹 Clear</button>
                 <button type="button" id="copy-text" onclick="copyTranscript()">📋 Copy</button>
             </div>
-            <div id="hearing-status" class="status-box" style="color: #000;">Status: ready.</div>
+            <div id="hearing-status" class="status-box">Status: ready.</div>
             <textarea id="transcript" placeholder="Recognized speech appears here..."></textarea>
         </section>
 
@@ -600,9 +597,9 @@
             </div>
             <div class="picker-row">
                 <label for="font-color-picker">Font color</label>
-                <input type="color" id="font-color-picker" value="#222222" onchange="setFontColor(this.value)">
+                <input type="color" id="font-color-picker" value="#ffffff" onchange="setFontColor(this.value)">
                 <label for="bg-color-picker">Background color</label>
-                <input type="color" id="bg-color-picker" value="#f4f4f9" onchange="setBackgroundColor(this.value)">
+                <input type="color" id="bg-color-picker" value="#ffffff" onchange="setBackgroundColor(this.value)">
             </div>
             <div class="settings">
                 <button type="button" onclick="toggleContrast()">🌓 High Contrast</button>
@@ -614,7 +611,7 @@
 
         <section>
             <h2>⚡Quick Action Buzz</h2>
-            <p class="small-note" style="color: #2096da;">Tap to play a short buzzer: once for yes, twice for help.</p>
+            <p class="small-note">Tap to play a short buzzer: once for yes, twice for help.</p>
             <div class="quick-actions">
                 <button type="button" onclick="buzzPattern(1)">Buzz once: Yes</button>
                 <button type="button" onclick="buzzPattern(2)">Buzz twice:       I need help</button>
@@ -716,11 +713,14 @@
         }
 
         function setFontColor(color) {
+            document.body.style.setProperty('--text-color', color);
+            document.body.style.setProperty('--button-text', color);
             document.body.style.color = color;
         }
 
         function setBackgroundColor(color) {
-            document.body.style.backgroundColor = color;
+            document.body.style.background = color;
+            document.body.style.setProperty('--bg-color', color);
         }
 
         function toggleContrast() {
@@ -743,10 +743,13 @@
             document.body.style.fontSize = '18px';
             document.getElementById('font-size-range').value = 18;
             document.getElementById('font-size-label').textContent = '18px';
-            document.getElementById('font-color-picker').value = '#222222';
-            document.getElementById('bg-color-picker').value = '#f4f4f9';
+            document.getElementById('font-color-picker').value = '#ffffff';
+            document.getElementById('bg-color-picker').value = '#ffffff';
             document.body.style.removeProperty('color');
-            document.body.style.removeProperty('background-color');
+            document.body.style.removeProperty('background');
+            document.body.style.removeProperty('--text-color');
+            document.body.style.removeProperty('--button-text');
+            document.body.style.removeProperty('--bg-color');
         }
 
         let audioCtx = null;
