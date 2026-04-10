@@ -29,38 +29,6 @@ function toggleContrast() { document.body.classList.toggle('high-contrast-mode')
 let fontSize = 18;
 function changeSize(delta) { fontSize += delta; document.body.style.fontSize = fontSize + 'px'; }
 
-// ==================== SPEECH TO TEXT ====================
-const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
-let recognition = null;
-
-if (SpeechRecognitionAPI) {
-    recognition = new SpeechRecognitionAPI();
-    recognition.continuous = false;
-    recognition.interimResults = false;
-    recognition.lang = 'en-US';
-    recognition.onresult = function (e) {
-        document.getElementById('tts-input').value += e.results[0][0].transcript + ' ';
-        document.getElementById('tts-status').textContent = 'Status: Text captured!';
-    };
-    recognition.onspeechend = function () { recognition.stop(); };
-    recognition.onerror = function (e) {
-        document.getElementById('tts-status').textContent = 'Status: Error – ' + e.error;
-    };
-    recognition.onend = function () {
-        document.getElementById('tts-status').textContent = 'Status: Ready';
-    };
-} else {
-    document.getElementById('listen-btn').disabled = true;
-    document.getElementById('listen-btn').title = 'Not supported — use Chrome';
-    document.getElementById('tts-status').textContent = 'Status: Speech recognition unavailable (use Chrome)';
-}
-
-function startListening() {
-    if (!recognition) return;
-    document.getElementById('tts-status').textContent = 'Status: 🔴 Listening...';
-    recognition.start();
-}
-
 // ==================== SHARED STATE ====================
 let objectStream = null;
 let objectInterval = null;
