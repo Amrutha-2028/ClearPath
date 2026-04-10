@@ -1,6 +1,6 @@
 :root {
     --bg-color: #17508a;
-    --bg-overlay: rgba(255, 255, 255, 0.1);
+    --bg-overlay: rgba(0, 0, 0, 0.1);
     --text-color: #ffffff;
     --accent-color: #4a90e2;
     --accent-hover: #357abd;
