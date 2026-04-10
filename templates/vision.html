@@ -20,7 +20,7 @@
             <a href="/hearing.html" class="nav-button">Hearing Page & More</a>
         </div>
 
-        <h1>✨ Clear Path ✨</h1>
+        <h1>Clear Path ✨</h1>
         <p>Assistive tool for vision and hearing support with AI-powered features.</p>
         <div id="model-status">⏳ Loading object detection model...</div>
 
@@ -32,9 +32,7 @@
             <div id="tts-status" style="font-style:italic; margin-bottom:10px; color:var(--accent-color);">Status: Ready
             </div>
             <div class="controls">
-                <button id="listen-btn" onclick="startListening()" style="background-color:#28a745;">🎤 Start
-                    Listening</button>
-                <button onclick="speak()">🔊 Play</button>
+                <button onclick="speak()"  style="background-color:#28a745;">🔊 Play</button>
                 <button onclick="pauseSpeak()">⏸️ Pause</button>
                 <button onclick="stopSpeak()">⏹️ Stop</button>
             </div>
@@ -78,6 +76,7 @@
             </div>
             <div class="controls">
                 <button onclick="startColorDetection()">📷 Start Detection</button>
+                <button onclick="pauseSpeak()">⏸️ Pause</button>
                 <button onclick="stopColorDetection()">⏹️ Stop Detection</button>
             </div>
             <div id="color-info">
