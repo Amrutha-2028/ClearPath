@@ -57,6 +57,7 @@ body {
 }
 
 body {
+    background: #17508a;
     background: var(--bg-color);
     background-attachment: fixed;
     color: var(--text-color);
